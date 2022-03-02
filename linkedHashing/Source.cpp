@@ -16,6 +16,7 @@
 
 //Librerias
 #include <iostream>
+#include<string>
 
 //Declaración de nombres de espacio
 using namespace std;
@@ -77,15 +78,47 @@ class HashTable {
 
 			nElements = 0;		//Se especifica que no hay elementos ingresados a la tabla.
 		}
-		
-		//Inserta el elemento que recibe como argumento dentro de la tabla hash
-		void insertE(Element elm) {
-			//
-		}
 
 		//Busca la posición dentro de la tabla del elemento pasado como argumento.
 		Element* searchE(int key) {
-			//
+			Element* p = nullptr;
+			int position;
+
+			position = hashFunction(key);
+
+			if (hashTable[position] != NULL) {
+				p = hashTable[position];
+
+				while (p->getNextElement() != NULL && p->getNumber() != key) {
+					p = p->getNextElement();
+
+					if (p->getNumber() != key) {
+						p = nullptr;
+					}
+				}
+			}
+
+			return p;
+		}
+
+		//Inserta el elemento que recibe como argumento dentro de la tabla hash
+		void insertE(Element elem) {
+			int hx;					//Hash generado por la función hash, será la posición dentro del arreglo.
+			Element* newE;			//newE: Nuevo Elemento a insertar.
+			Element* p;				//Almacenará el elemento si este se encuentra en la tabla.
+
+			p = searchE(elem.getNumber());				//Se busca el elemento en la tabla para no insertar dos veces el mismo elemento.
+
+			if (!p) {									//Se entra a ete condicional si p no fue encontrado en la tabla hash.
+				newE = new Element(elem);				//Se genera una nueva dirección de memoria para newE.
+				newE->setNextElement(hashTable[hx]);	//Se enlaza el elemento con el apuntador de la posición en la cual se almacenará.
+				hashTable[hx] = newE;					//Se ingresa en la posición hx el nuevo elemento.
+				nElements++;							//Se incrementa el número de elementos ingresados a la tabla.
+			}
+			else {
+				//Mensaje de exception
+				throw "Error: No se puede ingresar la clave K = " + to_string(elem.getNumber()) + " porque ya se encuentra en la tabla.";
+			}
 		}
 
 		//Elimina el elemento pasado como argumento de la tabla.
