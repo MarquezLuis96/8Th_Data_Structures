@@ -1,6 +1,6 @@
 #Others
-./Debug/*
-./.vs/*
+./linkedHashing/Debug/*
+./linkedHashing/.vs/*
 ./Debug/linkedHashing.tlog/
 *.open.db
 Browse.VC.db
