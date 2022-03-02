@@ -60,18 +60,26 @@ class Element {
 //Clase HashTable - Esta es la clase que generará los objetos de tipo tabla hash
 class HashTable {
 	protected:
-		int end;				//end: Final.
-		int m;					//m: Número de elementos esperados/tamaño de tabla.
+		int nElements;			//nElements: Número de elementos ingresados a la tabla.
+		int m;					//m: Número de elementos esperados - tamaño de tabla.
 		Element** hashTable;	//hashTable: Doble apuntador al arreglo que representa la tabla hash.
 
 	public:
-		//Constructor de clase
-		HashTable(int key) {
-			//
-		}
+		//Constructor de clase, recibe el tamaño de la tabla
+		HashTable(int size) {
+			*hashTable = (new Element*) [size];		//Asignación dinámica de memoria para el tamaño de tabla.
+			m = size;								//Se le especifica el tamaño que tendrá la tabla.
 
+			//Se inicializan todas las posiciones de las claves k de la tabla hash en NULL.
+			for (int k = 0; k < m; k++) {
+				hashTable[k] = NULL;
+			}
+
+			nElements = 0;		//Se especifica que no hay elementos ingresados a la tabla.
+		}
+		
 		//Inserta el elemento que recibe como argumento dentro de la tabla hash
-		void insert(Element elm) {
+		void insertE(Element elm) {
 			//
 		}
 
@@ -86,8 +94,14 @@ class HashTable {
 		}
 
 	private:
+		//Función hash, se usa el método de la multiplicación, retorna la dirección de hash
 		int hashFunction(long key) {
-			//
+			double R = 0.618034;	//R: Constante para calcular el hash. El valor es inverso al numero áureo.
+			double d;				//d: Es la parte decimal de la multiplicación por R.
+			int hx;					//hx: será donde se almacene el hash generado por el método de la multiplicación.
+
+			d = ((key * R) - (floor(R * key)));	//Se obtiene la parte decimal.
+			hx = (int)(d * m);					//Cálculo del hash (parte decimal * tamaño de tabla)
 		}
 };
 
