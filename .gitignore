@@ -1,3 +1,15 @@
+#Others
+./Debug/
+./.vs/
+./Debug/linkedHashing.tlog/
+*.open.db
+Browse.VC.db
+Browse.VC.db-shm
+Browse.VC.wal
+Browse.VC.opendb
+*.suo
+*.ipch
+
 # Prerequisites
 *.d
 
