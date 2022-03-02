@@ -20,10 +20,11 @@
 //Declaración de nombres de espacio
 using namespace std;
 
+//Clase Element - Esta clase almacena el entero generado y el siguiente elemento generado
 class Element {
-	private:
-		int number;
-		Element* nextElement;
+	protected:
+		int number;				//number: La clave o dato a almacenar en la tabla hash
+		Element* nextElement;	//nextElement: Apunta al siguiente elemento de tipo Element (Lista)
 
 	public:
 		//Constructor básico (No recibe nada)
@@ -53,6 +54,40 @@ class Element {
 
 		Element* getNextElement() {
 			return nextElement;
+		}
+};
+
+//Clase HashTable - Esta es la clase que generará los objetos de tipo tabla hash
+class HashTable {
+	protected:
+		int end;				//end: Final.
+		int m;					//m: Número de elementos esperados/tamaño de tabla.
+		Element** hashTable;	//hashTable: Doble apuntador al arreglo que representa la tabla hash.
+
+	public:
+		//Constructor de clase
+		HashTable(int key) {
+			//
+		}
+
+		//Inserta el elemento que recibe como argumento dentro de la tabla hash
+		void insert(Element elm) {
+			//
+		}
+
+		//Busca la posición dentro de la tabla del elemento pasado como argumento.
+		Element* searchE(int key) {
+			//
+		}
+
+		//Elimina el elemento pasado como argumento de la tabla.
+		void deleteE() {
+			//
+		}
+
+	private:
+		int hashFunction(long key) {
+			//
 		}
 };
 
