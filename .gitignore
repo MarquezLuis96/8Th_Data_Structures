@@ -1,7 +1,7 @@
 #Others
-./linkedHashing/Debug/*
-./linkedHashing/.vs/*
-./Debug/linkedHashing.tlog/
+linkedHashing/Debug/*
+linkedHashing/.vs/*
+linkedHashing/Debug/linkedHashing.tlog/
 *.open.db
 Browse.VC.db
 Browse.VC.db-shm
