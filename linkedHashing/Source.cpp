@@ -112,9 +112,8 @@ class HashTable {
 			
 			nElements = 0;		//Se especifica que no hay elementos ingresados a la tabla.
 		}
-
-		//Busca la posición dentro de la tabla del elemento pasado como argumento.
-		Element* searchE(int key) {
+		//Busca un elemento, si lo encuentra lo retorna, si no lo encuentra retorna null
+		Element* searchEToReturn(int key) {
 			Element* p = NULL;
 			int position;
 
@@ -126,9 +125,34 @@ class HashTable {
 				while (p->getNextElement() != NULL && p->getNumber() != key) {
 					p = p->getNextElement();
 
-					if (p->getNumber() != key) {
-						p = NULL;
+					if (p->getNumber() != key && p->getNextElement() == NULL) {
+						return NULL;
 					}
+				}
+			}
+
+			return p;
+		}
+
+		//Busca la posición dentro de la tabla del elemento pasado como argumento.
+		// Esta funcion busca solo para insertar, para retornar usaremos searchEReturn
+		// que es muy parecida pero retorna null cuando no se encuentra la clave,
+		//esta en cambio retorna el ultimo elemento
+		Element* searchEToInsert(int key) {
+			Element* p = NULL;
+			int position;
+
+			position = hashFunction(key);
+
+			if (hashTable[position] != NULL) {
+				p = hashTable[position];
+
+				while (p->getNextElement() != NULL && p->getNumber() != key) {
+					p = p->getNextElement();
+
+					/*if (p->getNumber() != key && p->getNextElement() == NULL) {
+						return NULL;
+					}*/
 				}
 			}
 
@@ -143,7 +167,7 @@ class HashTable {
 
 			hx = hashFunction(elem.getNumber());
 
-			p = searchE(elem.getNumber());				//Se busca el la posicion dentro del arreglo en la que se encuentra o no elem.
+			p = searchEToInsert(elem.getNumber());				//Se busca el la posicion dentro del arreglo en la que se encuentra o no elem.
 
 			if (!p) {									//Si la posici[on está vacía seentra acá y se inserta el primer nodo de esa pos. de la tabla.
 				newE = new Element(elem);				//Se genera una nueva dirección de memoria para newE.
@@ -152,28 +176,19 @@ class HashTable {
 				nElements++;							//Se incrementa el número de elementos ingresados a la tabla.
 			}
 			else {										//Se entra acá si ya en la pos del arreglo que marca la clave hay al menos un nodo.
-				Element* current = hashTable[hx];
 				
-				do {
-					if (current->getNextElement() == NULL) {
-						if (current->getNumber() != elem.getNumber()) {
-							newE = new Element(elem);
-							newE->setNextElement(NULL);
-							current->setNextElement(newE);
-							nElements++;
-						}
-						else {
-							cout << "Error: No se puede ingresar la clave K = " << elem.getNumber() << " porque ya se encuentra en la tabla." << endl;
-						}
+				if (p->getNumber() == elem.getNumber()) {
+					cout << "Error: No se puede ingresar la clave K = " << elem.getNumber() << " porque ya se encuentra en la tabla." << endl;
+				}
+				else {
+					Element* current = p;
+					if (current->getNextElement() == NULL && current->getNumber() != elem.getNumber()) {
+						newE = new Element(elem);
+						newE->setNextElement(NULL);
+						current->setNextElement(newE);
+						nElements++;
 					}
-					else {
-						if (current->getNextElement()->getNumber() == elem.getNumber()) {
-							cout << "Error: No se puede ingresar la clave K = " << elem.getNumber() << " porque ya se encuentra en la tabla." << endl;
-						}
-					}
-
-					current = current->getNextElement();
-				} while (current->getNextElement() != NULL);
+				}
 			}
 		}
 
@@ -226,18 +241,19 @@ int main(int args, char* argsv[]) {
 
 	HashTable tabla(5);
 
-	Element e1, e2, e3, e4, e5, e6, e7, e8, e9, e10;
+	Element e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11;
 
-	e1.setNumber(1);
-	e2.setNumber(2);
-	e3.setNumber(3);
-	e4.setNumber(4);
-	e5.setNumber(5);
-	e6.setNumber(7);
-	e7.setNumber(8);
-	e8.setNumber(10);
-	e9.setNumber(6);
-	e10 = e9;
+	e1.setNumber(2);
+	e2.setNumber(5);
+	e3.setNumber(6);
+	e4.setNumber(8);
+	e5.setNumber(7);
+	e6.setNumber(4);
+	e7.setNumber(9);
+	e8.setNumber(4);
+	e9.setNumber(11);
+	e10.setNumber(12);
+	e11 = e10;
 
 	tabla.insertE(e1);
 	tabla.insertE(e2);
@@ -249,20 +265,20 @@ int main(int args, char* argsv[]) {
 	tabla.insertE(e8);
 	tabla.insertE(e9);
 	tabla.insertE(e10);
+	tabla.insertE(e11);
 	cout << "Elementos insertados en la tabla... " << endl;
 
 	tabla.deleteE(1);
 	tabla.deleteE(2);
-	tabla.deleteE(3);
-	tabla.deleteE(4);
-	tabla.deleteE(5);
 	tabla.deleteE(5);
 	tabla.deleteE(6);
-	tabla.deleteE(7);
 	tabla.deleteE(8);
+	tabla.deleteE(7);
+	tabla.deleteE(4);
 	tabla.deleteE(9);
+	tabla.deleteE(4);
 	tabla.deleteE(11);
-	tabla.deleteE(10);
+	tabla.deleteE(12);
 	cout << "Elementos eliminados de la tabla... " << endl;
 
 	return 0;
