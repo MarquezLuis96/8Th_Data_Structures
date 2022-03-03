@@ -16,7 +16,8 @@
 
 //Librerias
 #include <iostream>
-#include<string>
+#include <string>
+#include <cstdlib>
 
 //Declaración de nombres de espacio
 using namespace std;
@@ -112,6 +113,21 @@ class HashTable {
 			
 			nElements = 0;		//Se especifica que no hay elementos ingresados a la tabla.
 		}
+
+		//Retorna el tamaño de la tabla
+		int getM() {
+			return m;
+		}
+
+		//Retorna el número de elementos ingresados a la tabla
+		int getNElements() {
+			return nElements;
+		}
+
+		Element** getHashTable() {
+			return hashTable;
+		}
+
 		//Busca un elemento, si lo encuentra lo retorna, si no lo encuentra retorna null
 		Element* searchEToReturn(int key) {
 			Element* p = NULL;
@@ -160,7 +176,7 @@ class HashTable {
 		}
 
 		//Inserta el elemento que recibe como argumento dentro de la tabla hash
-		void insertE(Element elem) {
+		bool insertE(Element elem) {
 			int hx;					//Hash generado por la función hash, será la posición dentro del arreglo.
 			Element* newE;			//newE: Nuevo Elemento a insertar.
 			Element* p;				//Almacenará el elemento si este se encuentra en la tabla.
@@ -178,7 +194,8 @@ class HashTable {
 			else {										//Se entra acá si ya en la pos del arreglo que marca la clave hay al menos un nodo.
 				
 				if (p->getNumber() == elem.getNumber()) {
-					cout << "Error: No se puede ingresar la clave K = " << elem.getNumber() << " porque ya se encuentra en la tabla." << endl;
+					//cout << "Error: No se puede ingresar la clave K = " << elem.getNumber() << " porque ya se encuentra en la tabla." << endl;
+					return false;
 				}
 				else {
 					Element* current = p;
@@ -190,6 +207,8 @@ class HashTable {
 					}
 				}
 			}
+
+			return true;
 		}
 
 		//Elimina el elemento pasado como argumento de la tabla.
@@ -236,10 +255,66 @@ class HashTable {
 		}
 };
 
+void randomNumbersGeneration(int maxNumbers, HashTable table) {
+	int randomNumber;
+	for (int i = 0; i < maxNumbers; i++) {
+		randomNumber = 0 + rand() % maxNumbers;
+
+		/*
+			Si el número generado ya se encuentra en la tabla
+			Se busca otro número.
+			Ojo: Solo si es el mismo número, si hay colisiones con
+			otros números se agrega sin problemas.
+		*/
+
+		while (!table.insertE(randomNumber)) {
+			randomNumber = 0 + rand() % maxNumbers;
+		}
+	}
+
+	cout << "Se han agregado exitosamente " << maxNumbers << " numeros en el rango [0," << maxNumbers << "] a la tabla hash." << endl;
+}
+
+int countNodes(Element* list) {
+	Element* p = list;
+	int nNodes = 0;
+
+	if (p != NULL) {
+		nNodes++;
+
+		while (p->getNextElement() != NULL) {
+			nNodes++;
+			p = p->getNextElement();
+		}
+	}
+
+	return nNodes;
+}
+
+void countCollisions(HashTable table) {
+	int maxCollisions = 0;	//El mayor número de colisiones
+	int posCollisions = 0;	//La posición del elemento con el mayot num de colisiones
+	int currCollisions = 0;	//Colisiones Actuales
+	int m = table.getM();
+	
+	for (int i = 0; i < m; i++) {
+		currCollisions = countNodes(table.getHashTable()[i]);
+		if (currCollisions > maxCollisions) {
+			maxCollisions = currCollisions;
+			posCollisions = i;
+		}
+	}
+
+	cout << "La posicion dentro de la tabla con el mayor numero de colisiones es: " << posCollisions << endl;
+	cout << "teniendo " << maxCollisions << " colisiones" << endl;
+}
+
 //Función principal
 int main(int args, char* argsv[]) {
 
 	HashTable tabla(5);
+
+	//randomNumbersGeneration(tabla.getM(), tabla);
 
 	Element e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11;
 
@@ -268,7 +343,9 @@ int main(int args, char* argsv[]) {
 	tabla.insertE(e11);
 	cout << "Elementos insertados en la tabla... " << endl;
 
-	tabla.deleteE(1);
+	countCollisions(tabla);
+
+	/*tabla.deleteE(1);
 	tabla.deleteE(2);
 	tabla.deleteE(5);
 	tabla.deleteE(6);
@@ -279,7 +356,7 @@ int main(int args, char* argsv[]) {
 	tabla.deleteE(4);
 	tabla.deleteE(11);
 	tabla.deleteE(12);
-	cout << "Elementos eliminados de la tabla... " << endl;
+	cout << "Elementos eliminados de la tabla... " << endl;*/
 
 	return 0;
 }
